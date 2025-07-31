@@ -1,0 +1,19 @@
+namespace: aks-demo-cluster
+
+resources:
+  - ../base
+  - namespace.yaml
+
+patches:
+- path: cluster-claim.yaml 
+  target:
+    group: kubernetes.mckesson.com
+    version: v1alpha1
+    kind: AksClusterClaim
+    name: aks-demo-cluster
+- patch: |-
+    - op: replace
+      path: /metadata/name
+      value: aks-demo-cluster  
+  target:
+    kind: AksClusterClaim 

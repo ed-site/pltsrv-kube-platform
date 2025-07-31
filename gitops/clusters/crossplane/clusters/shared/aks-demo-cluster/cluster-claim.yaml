@@ -1,19 +1,18 @@
-
 apiVersion: kubernetes.mckesson.com/v1alpha1
 kind: AksClusterClaim
 metadata:
-  name: aks-ce-eastus-dev
+  name: aks-demo-cluster
   annotations:
-    crossplane.io/external-name: aks-ce-eastus-dev  
+    crossplane.io/external-name: aks-demo-cluster  
 spec:
   writeConnectionSecretToRef:
-    name: aks-ce-eastus-dev-secret
+    name: aks-demo-cluster-secret
   location: "EastUs"
   aks:
     adminUser: #<<Insert Here: Object Id of the User>>
     tags:
-      environment: dev
+      environment: demo
       "core-snow-as-number": "123456789"
   virtualNetwork:
     tags:
-      environment: dev   
+      environment: demo 
