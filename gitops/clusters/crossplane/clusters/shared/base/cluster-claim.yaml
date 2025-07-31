@@ -1,4 +1,4 @@
-apiVersion: kubernetes.example.com/v1alpha1
+apiVersion: kubernetes.mckesson.com/v1alpha1
 kind: AksClusterClaim
 metadata:
   name: aks-ce-cluster

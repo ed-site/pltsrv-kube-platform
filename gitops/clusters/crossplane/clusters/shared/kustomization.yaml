@@ -1,4 +1,3 @@
 resources:
   - aks-ce-eastus-dev
   - aks-ce-eastus-prod
-  - aks-demo-cluster
