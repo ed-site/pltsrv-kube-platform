@@ -241,10 +241,6 @@ kubectl apply --dry-run=client -f gitops/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🆘 Support
 
 - **Issues**: [GitHub Issues](https://github.com/ed-site/pltsrv-kube-platform/issues)
@@ -259,6 +255,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Backstage](https://backstage.io/)
 - [Terraform](https://www.terraform.io/)
 
----
-
-**Note**: This platform is designed for production use but should be thoroughly tested in your environment before deployment.

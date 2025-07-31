@@ -1,0 +1,19 @@
+namespace: aks-ce-eastus-dev
+
+resources:
+  - ../base
+  - namespace.yaml
+
+patches:
+- path: cluster-claim.yaml 
+  target:
+    group: kubernetes.mckesson.com
+    version: v1alpha1
+    kind: AksClusterClaim
+    name: aks-ce-eastus-dev
+- patch: |-
+    - op: replace
+      path: /metadata/name
+      value: aks-ce-eastus-dev  
+  target:
+    kind: AksClusterClaim     

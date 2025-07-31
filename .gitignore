@@ -95,7 +95,7 @@ site
 *.session.sql
 
 # directory for development
-dev/
+# dev/
 
 # TLS certificates
 *.crt
