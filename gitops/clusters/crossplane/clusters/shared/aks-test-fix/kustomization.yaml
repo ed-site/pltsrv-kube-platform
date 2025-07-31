@@ -1,0 +1,79 @@
+namespace: aks-test-fix
+
+resources:
+  - ../base
+  - namespace.yaml
+
+patches:
+- path: cluster-claim.yaml 
+  target:
+    group: kubernetes.mckesson.com
+    version: v1alpha1
+    kind: AksClusterClaim
+    name: aks-test-fix
+- patch: |-
+    - op: replace
+      path: /metadata/name
+      value: aks-test-fix  
+  target:
+    kind: AksClusterClaim
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/crossplane.io~1external-name
+      value: aks-test-fix  
+  target:
+    kind: AksClusterClaim
+- patch: |-
+    - op: replace
+      path: /spec/subnet/name
+      value: subnet-aks-test-fix  
+  target:
+    kind: AksClusterClaim
+- patch: |-
+    - op: replace
+      path: /spec/aks/defaultNodePool/vmSize
+      value: Standard_B2s
+    - op: replace
+      path: /spec/aks/defaultNodePool/nodeCount
+      value: 1
+    - op: replace
+      path: /spec/aks/defaultNodePool/minCount
+      value: 1
+    - op: replace
+      path: /spec/aks/defaultNodePool/maxCount
+      value: 2
+    - op: replace
+      path: /spec/aks/defaultNodePool/maxPods
+      value: 50
+    - op: replace
+      path: /spec/aks/defaultNodePool/osDiskSizeGb
+      value: 128
+  target:
+    kind: AksClusterClaim
+- patch: |-
+    - op: replace
+      path: /spec/userNodePool/vmSize
+      value: Standard_B2s
+    - op: replace
+      path: /spec/userNodePool/nodeCount
+      value: 1
+    - op: replace
+      path: /spec/userNodePool/minCount
+      value: 1
+    - op: replace
+      path: /spec/userNodePool/maxCount
+      value: 2
+    - op: replace
+      path: /spec/userNodePool/maxPods
+      value: 50
+    - op: replace
+      path: /spec/userNodePool/osDiskSizeGb
+      value: 128
+  target:
+    kind: AksClusterClaim
+- patch: |-
+    - op: add
+      path: /spec/aks/adminUser
+      value: "4e4d0501-e693-4f3e-965b-5bec6c410c03"
+  target:
+    kind: AksClusterClaim
