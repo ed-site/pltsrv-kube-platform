@@ -1,0 +1,23 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: sleep-
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      serviceAccount: argocd-application-controller
+      containers:
+      - name: sleep
+        image: dtzar/helm-kubectl
+        command:
+        - /bin/bash
+        - -c
+        - |
+          /usr/local/bin/kubectl wait --timeout=300s --for=jsonpath='{.status.availableReplicas}'=1 -n cert-manager deployment cert-manager
+      restartPolicy: Never
+  backoffLimit: 2

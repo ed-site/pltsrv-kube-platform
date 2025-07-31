@@ -1,0 +1,73 @@
+apiVersion: kubernetes.example.com/v1alpha1
+kind: AksClusterClaim
+metadata:
+  name: aks-ce-cluster
+  annotations:
+    crossplane.io/external-name: aks-ce-cluster
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  location: "East US"
+  aks:
+    defaultNodePool:
+      name: system
+      vmSize: Standard_D4s_v3
+      enableAutoScaling: true
+      nodeCount: 3
+      minCount: 3
+      maxCount: 5
+      maxPods: 250
+      nodeLabels:
+        mode: system
+      onlyCriticalAddonsEnabled: false
+      osDiskSizeGb: 256
+      osDiskType: Managed
+    roleBasedAccessControlEnabled: true
+    oidcIssuerEnabled: true
+    workloadIdentityEnabled: true
+    privateClusterEnabled: false
+    azureActiveDirectoryRoleBasedAccessControl:
+      - adminGroupObjectIds:
+          - 4e4d0501-e693-4f3e-965b-5bec6c410c03
+        azureRbacEnabled: true
+        managed: true
+    azurePolicyEnabled: true
+    networkProfile:    
+      - networkPlugin: azure
+        networkPolicy: cilium
+        outboundType: loadBalancer
+        dnsServiceIp: 100.64.0.10
+        serviceCidr: 100.64.0.0/16
+    workloadAutoscalerProfile:
+      - kedaEnabled: true
+        verticalPodAutoscalerEnabled: true
+    tags:
+      environment: Test
+      provisionedBy: Crossplane
+      "core-snow-as-number": "123456789"
+  userNodePool:
+    name: user
+    vmSize: Standard_D16s_v5
+    enableAutoScaling: true
+    nodeCount: 3
+    minCount: 3
+    maxCount: 10
+    maxPods: 250
+    nodeLabels:
+      mode: user
+    osDiskSizeGb: 512
+    osDiskType: Managed
+    osSku: AzureLinux
+    osType: Linux
+  subnet:
+    name: subnet-aks-ce-cluster
+    privateEndpointNetworkPoliciesEnabled: true
+    privateLinkServiceNetworkPoliciesEnabled: false
+    addressPrefixes:
+      - 10.0.0.0/16
+  virtualNetwork:
+    addressSpace:
+      - 10.0.0.0/8
+    tags:
+      environment: Test
+      provisionedBy: Crossplane   

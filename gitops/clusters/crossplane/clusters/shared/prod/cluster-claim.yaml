@@ -1,0 +1,20 @@
+
+apiVersion: kubernetes.example.com/v1alpha1
+kind: AksClusterClaim
+metadata:
+  name: aks-ce-eastus-prod
+  annotations:
+    crossplane.io/external-name: aks-ce-eastus-prod  
+spec:
+  writeConnectionSecretToRef:
+    name: aks-ce-eastus-prod-secret    
+  location: "EastUs"
+  aks:
+    adminUser: #<<Insert Here: Object Id of the User>>
+    tags:
+      environment: prod
+      "core-snow-as-number": "123456789"
+  virtualNetwork:
+    tags:
+      environment: prod     
+  
