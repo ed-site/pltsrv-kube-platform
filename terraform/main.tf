@@ -3,14 +3,12 @@ locals {
   environment = "control-plane"
   location    = var.location
 
-
   #cluster_version = var.kubernetes_version
 
   gitops_addons_url      = "${var.gitops_addons_org}/${var.gitops_addons_repo}"
   gitops_addons_basepath = var.gitops_addons_basepath
   gitops_addons_path     = var.gitops_addons_path
   gitops_addons_revision = var.gitops_addons_revision
-
 
   argocd_namespace = "argocd"
 
@@ -139,7 +137,6 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_all" {
 ################################################################################
 # AKS: Module
 ################################################################################
-
 module "aks" {
   source                            = "Azure/aks/azurerm"
   version                           = "10.2.0"
@@ -194,13 +191,9 @@ module "aks" {
   depends_on = [module.network]
 }
 
-
-
-
 ################################################################################
 # Workload Identity: Module
 ################################################################################
-
 resource "azurerm_user_assigned_identity" "akspe" {
   name                = "akspe"
   resource_group_name = azurerm_resource_group.this.name
@@ -291,7 +284,6 @@ resource "azuread_application" "backstage-app" {
   }
 }
 
-
 # Define the OAuth2 permissions (redirect URIs)
 resource "azuread_application_redirect_uris" "backstage_redirect_uri" {
   count          = local.build_backstage ? 1 : 0
@@ -299,6 +291,7 @@ resource "azuread_application_redirect_uris" "backstage_redirect_uri" {
   type           = "Web"
   redirect_uris  = ["https://${azurerm_public_ip.backstage_public_ip[count.index].ip_address}/api/auth/microsoft/handler/frame"]
 }
+
 # Define the service principal
 resource "azuread_service_principal" "backstage-app-sp" {
   count     = local.build_backstage ? 1 : 0
@@ -338,7 +331,6 @@ output "azure_client_id" {
 }
 
 output "azure_client_secret" {
-
   value     = length(azuread_service_principal_password.backstage-sp-password) > 0 ? azuread_service_principal_password.backstage-sp-password[0].value : null
   sensitive = true
 }
@@ -350,7 +342,6 @@ output "azure_tenant_id" {
 ################################################################################
 # AKS: Public IP for predictable backstage service & redirect URI
 ################################################################################
-
 resource "azurerm_public_ip" "backstage_public_ip" {
   count               = local.build_backstage ? 1 : 0
   name                = "backstage-public-ip"
@@ -370,15 +361,14 @@ resource "kubernetes_namespace" "backstage_nammespace" {
     name = "backstage"
   }
 }
+
 resource "kubernetes_service_account" "backstage_service_account" {
   count      = local.build_backstage ? 1 : 0
   depends_on = [kubernetes_namespace.backstage_nammespace]
   metadata {
     name      = "backstage-service-account"
     namespace = "backstage"
-
   }
-
 }
 
 resource "kubernetes_role" "backstage_pod_reader" {
@@ -446,7 +436,7 @@ resource "kubernetes_secret" "backstage_service_account_secret" {
 # Wait for AKS cluster to be ready
 ################################################################################
 resource "time_sleep" "wait_for_aks" {
-  depends_on = [module.aks]
+  depends_on      = [module.aks]
   create_duration = "60s"
 }
 
@@ -479,7 +469,6 @@ resource "kubernetes_secret" "git_secrets" {
   data = each.value
 }
 
-
 ################################################################################
 # GitOps Bridge: Bootstrap
 ################################################################################
@@ -505,11 +494,9 @@ module "gitops_bridge_bootstrap" {
   }
 }
 
-
 ################################################################################
 # Backstage: Bootstrap
 ################################################################################
-
 resource "kubernetes_secret" "tls_secret" {
   count      = local.build_backstage ? 1 : 0
   depends_on = [kubernetes_namespace.backstage_nammespace]
@@ -526,8 +513,6 @@ resource "kubernetes_secret" "tls_secret" {
     "tls.key" = file("${path.module}/../dev/certs/private.key")
   }
 }
-
-
 
 resource "helm_release" "backstage" {
   count      = local.build_backstage ? 1 : 0
