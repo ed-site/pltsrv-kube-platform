@@ -11,3 +11,15 @@ provider:
 
 deploymentRuntimeConfig:
   enabled: true
+  env:
+    - name: AZURE_API_VERSION
+      value: "2024-11-01"
+    - name: TF_VAR_azure_api_version
+      value: "2024-11-01"
+    - name: TF_VAR_azurerm_api_version
+      value: "2024-11-01"
+
+# Provider configuration
+providerConfig:
+  enabled: true
+  apiVersion: "2024-11-01"

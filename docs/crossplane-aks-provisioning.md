@@ -8,10 +8,26 @@ This guide explains how to provision Azure Kubernetes Service (AKS) clusters usi
 
 ### ❌ **Crossplane Azure Provider Issue**
 
-The current Crossplane Azure provider (v1.4.0) has a critical limitation:
+The Crossplane Azure provider has a critical limitation with API versions:
+
+**v1.4.0 Issues:**
 - **API Version**: Uses `2023-06-02-preview` which is **not supported** in any Azure region
 - **Error**: `NoRegisteredProviderFound: No registered resource provider found for location 'centralus' and API version '2023-06-02-preview'`
-- **Impact**: AKS cluster provisioning fails with API version compatibility errors
+
+**v1.13.1 Issues (Updated but still problematic):**
+- **API Version**: Uses `2023-09-02-preview` which is **still not supported** in any Azure region
+- **Error**: `InvalidApiVersionParameter: The api-version '2023-09-02-preview' is invalid`
+- **Impact**: AKS cluster provisioning still fails with API version compatibility errors
+
+The provider continues to use preview API versions that are not available in production Azure regions.
+
+**Testing Results (January 31, 2025):**
+- ✅ Provider update from v1.4.0 to v1.13.1 was successful
+- ✅ Cluster claim creation works with proper kustomize structure
+- ✅ Resource Group, VirtualNetwork, and Subnet provisioning successful
+- ❌ Kubernetes Cluster provisioning still fails due to unsupported API version
+- 📋 Supported API versions include: `2025-04-01`, `2025-03-01`, `2024-11-01`, `2024-08-01`, etc.
+- ❌ Provider still uses preview versions: `2023-09-02-preview` (not supported)
 
 ### ✅ **Working Alternatives**
 
