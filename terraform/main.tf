@@ -443,10 +443,18 @@ resource "kubernetes_secret" "backstage_service_account_secret" {
 }
 
 ################################################################################
+# Wait for AKS cluster to be ready
+################################################################################
+resource "time_sleep" "wait_for_aks" {
+  depends_on = [module.aks]
+  create_duration = "60s"
+}
+
+################################################################################
 # GitOps Bridge: Private ssh keys for git
 ################################################################################
 resource "kubernetes_namespace" "argocd_namespace" {
-  depends_on = [module.aks]
+  depends_on = [time_sleep.wait_for_aks]
   metadata {
     name = "argocd"
   }
@@ -476,7 +484,7 @@ resource "kubernetes_secret" "git_secrets" {
 # GitOps Bridge: Bootstrap
 ################################################################################
 module "gitops_bridge_bootstrap" {
-  depends_on = [module.aks]
+  depends_on = [time_sleep.wait_for_aks]
   source     = "gitops-bridge-dev/gitops-bridge/helm"
 
   cluster = {
