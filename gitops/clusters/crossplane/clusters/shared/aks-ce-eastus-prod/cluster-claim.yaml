@@ -10,7 +10,7 @@ spec:
     name: aks-ce-eastus-prod-secret    
   location: "EastUs"
   aks:
-    adminUser: #<<Insert Here: Object Id of the User>>
+    adminUser: "35f987a7-2b25-4603-82f9-7db52032afdf"
     tags:
       environment: prod
       "core-snow-as-number": "123456789"
