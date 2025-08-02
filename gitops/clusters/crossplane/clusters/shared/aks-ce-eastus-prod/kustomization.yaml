@@ -16,4 +16,10 @@ patches:
       path: /metadata/name
       value: aks-ce-eastus-prod  
   target:
+    kind: AksClusterClaim
+- patch: |-
+    - op: add
+      path: /spec/aks/adminUser
+      value: "35f987a7-2b25-4603-82f9-7db52032afdf"
+  target:
     kind: AksClusterClaim   
