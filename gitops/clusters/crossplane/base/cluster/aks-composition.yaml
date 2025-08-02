@@ -97,6 +97,10 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.aks.defaultNodePool.onlyCriticalAddonsEnabled
           toFieldPath: spec.forProvider.defaultNodePool[0].onlyCriticalAddonsEnabled
+      readinessChecks:
+        - type: MatchString
+          fieldPath: status.atProvider.id
+          matchString: ".*"
         - type: FromCompositeFieldPath
           fromFieldPath: spec.aks.defaultNodePool.osSku
           toFieldPath: spec.forProvider.defaultNodePool[0].osSku
@@ -289,6 +293,10 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.aks.adminUser
           toFieldPath: spec.forProvider.principalId
+      readinessChecks:
+        - type: MatchString
+          fieldPath: status.atProvider.id
+          matchString: ".*"
     - name: helm-provider-config
       base:
         apiVersion: helm.crossplane.io/v1beta1
