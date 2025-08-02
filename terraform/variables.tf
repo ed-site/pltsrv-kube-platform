@@ -51,6 +51,8 @@ variable "addons" {
   type        = any
   default = {
     enable_argocd = true # installs argocd
+    enable_ingress_nginx = true # installs nginx ingress
+    enable_cert_manager = true # installs cert-manager
   }
 }
 
@@ -60,11 +62,15 @@ variable "addons_versions" {
     argocd_chart_version        = string
     argo_rollouts_chart_version = string
     kargo_chart_version         = string
+    nginx_ingress_chart_version = string
+    cert_manager_chart_version  = string
   }))
   default = [{
     argocd_chart_version        = "7.8.25" # https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/Chart.yaml
     argo_rollouts_chart_version = "2.39.5" # https://github.com/argoproj/argo-helm/blob/main/charts/argo-rollouts/Chart.yaml
     kargo_chart_version         = "1.4.1"  # https://github.com/akuity/kargo/releases
+    nginx_ingress_chart_version = "4.7.1"  # https://github.com/kubernetes/ingress-nginx/releases
+    cert_manager_chart_version  = "1.13.3" # https://github.com/cert-manager/cert-manager/releases
   }]
 }
 

@@ -1,0 +1,48 @@
+controller:
+  # Higher resource allocation for control-plane
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  # Higher replica count for control-plane
+  replicaCount: 2
+  
+  # Autoscaling configuration for control-plane
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+  
+  # Service configuration for control-plane
+  service:
+    type: LoadBalancer
+    annotations:
+      # Azure Load Balancer annotations for control-plane
+      service.beta.kubernetes.io/azure-load-balancer-internal: false
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: ""
+      service.beta.kubernetes.io/azure-load-balancer-sku: "Standard"
+      # Additional annotations for control-plane
+      service.beta.kubernetes.io/azure-load-balancer-name: "control-plane-ingress"
+  
+  # Pod disruption budget for control-plane
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# Default backend configuration for control-plane
+defaultBackend:
+  enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi 

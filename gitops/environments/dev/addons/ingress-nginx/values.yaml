@@ -1,0 +1,48 @@
+controller:
+  # Standard resource allocation for dev environment
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Single replica for dev environment
+  replicaCount: 1
+  
+  # Autoscaling configuration for dev
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  
+  # Service configuration for dev
+  service:
+    type: LoadBalancer
+    annotations:
+      # Azure Load Balancer annotations for dev
+      service.beta.kubernetes.io/azure-load-balancer-internal: false
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: ""
+      service.beta.kubernetes.io/azure-load-balancer-sku: "Standard"
+      # Additional annotations for dev
+      service.beta.kubernetes.io/azure-load-balancer-name: "dev-ingress"
+  
+  # Pod disruption budget for dev
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# Default backend configuration for dev
+defaultBackend:
+  enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi 

@@ -1,0 +1,115 @@
+controller:
+  # Enable metrics for monitoring
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: "10254"
+  
+  # Configure for Azure Load Balancer
+  service:
+    type: LoadBalancer
+    annotations:
+      # Azure Load Balancer annotations
+      service.beta.kubernetes.io/azure-load-balancer-internal: false
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: ""
+      service.beta.kubernetes.io/azure-load-balancer-sku: "Standard"
+  
+  # Resource limits and requests
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Configure for Azure CNI
+  config:
+    # Enable proxy protocol for Azure Load Balancer
+    use-proxy-protocol: "false"
+    # Configure real IP from Azure Load Balancer
+    use-forwarded-headers: "true"
+    # Enable real client IP
+    real-ip-header: "X-Forwarded-For"
+    # Trusted proxies (Azure Load Balancer IPs)
+    proxy-real-ip-cidr: "0.0.0.0/0"
+  
+  # Pod security context
+  podSecurityContext:
+    fsGroup: 101
+    runAsNonRoot: true
+    runAsUser: 101
+  
+  # Container security context
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 101
+  
+  # Admission webhook configuration
+  admissionWebhooks:
+    enabled: true
+    patch:
+      enabled: true
+      image:
+        tag: v1.8.1
+    certManager:
+      enabled: false
+  
+  # Default backend configuration
+  defaultBackend:
+    enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+
+# Global configuration
+global:
+  # Disable the admission webhook
+  admissionWebhook:
+    enabled: true
+    failurePolicy: Ignore
+    timeoutSeconds: 30
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods", "services", "endpoints"]
+        scope: "Namespaced"
+
+# RBAC configuration
+rbac:
+  create: true
+  scope: true
+
+# Service account configuration
+serviceAccount:
+  create: true
+  name: "ingress-nginx"
+  annotations: {}
+
+# Pod disruption budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Horizontal Pod Autoscaler
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80 

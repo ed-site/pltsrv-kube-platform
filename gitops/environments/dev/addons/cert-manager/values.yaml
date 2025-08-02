@@ -1,0 +1,52 @@
+# Development environment specific cert-manager configuration
+
+# Controller configuration for dev
+controller:
+  # Standard resource allocation for dev
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Single replica for dev
+  replicaCount: 1
+  
+  # Pod disruption budget for dev
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# Webhook configuration for dev
+webhook:
+  # Standard resource allocation for dev
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Pod disruption budget for dev
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# CA Injector configuration for dev
+cainjector:
+  # Standard resource allocation for dev
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Pod disruption budget for dev
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1 

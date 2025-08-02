@@ -30,7 +30,10 @@ locals {
     enable_cert_manager                    = false
     enable_gatekeeper                      = try(var.addons.enable_gatekeeper, false)
     enable_gpu_operator                    = try(var.addons.enable_gpu_operator, false)
-    enable_ingress_nginx                   = try(var.addons.enable_ingress_nginx, false)
+    enable_ingress_nginx                   = try(var.addons.enable_ingress_nginx, true) # installed by default
+    nginx_ingress_chart_version            = var.addons_versions[0].nginx_ingress_chart_version
+    enable_cert_manager                    = try(var.addons.enable_cert_manager, true) # installed by default
+    cert_manager_chart_version             = var.addons_versions[0].cert_manager_chart_version
     enable_kargo                           = try(var.addons.enable_kargo, true) # installed by default
     kargo_chart_version                    = var.addons_versions[0].kargo_chart_version
     enable_kyverno                         = try(var.addons.enable_kyverno, false)
@@ -513,6 +516,9 @@ resource "kubernetes_secret" "tls_secret" {
     "tls.key" = file("${path.module}/../dev/certs/private.key")
   }
 }
+
+# Note: TLS secrets will be managed by cert-manager automatically
+# The ArgoCD TLS secret will be created by cert-manager when the Certificate resource is applied
 
 resource "helm_release" "backstage" {
   count      = local.build_backstage ? 1 : 0

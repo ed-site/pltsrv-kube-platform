@@ -34,6 +34,9 @@ A comprehensive Azure Kubernetes Service (AKS) based container platform that imp
 - **TLS Security**: Automated certificate generation and management
 - **Multi-Environment Support**: Dev, staging, and production environments
 - **Monitoring & Observability**: Integrated with Azure Monitor and Dynatrace
+- **Nginx Ingress Controller**: GitOps-managed ingress controller for both control-plane and workload clusters
+- **ArgoCD Ingress**: Domain-based access to ArgoCD UI with TLS termination and security headers
+- **Cert-Manager with ACME**: Automatic TLS certificate management using Let's Encrypt
 
 ## 📋 Prerequisites
 
@@ -232,6 +235,12 @@ kubectl apply --dry-run=client -f gitops/
 - [GitOps Workflow](docs/gitops.md)
 - [Backstage Customization](docs/backstage.md)
 - [TLS Certificate Management](dev/docs/openssl-tls-certificate-generation.md)
+- [Nginx Ingress Controller](docs/nginx-ingress-gitops-bridge.md)
+- [Nginx Ingress Quick Start](docs/nginx-ingress-quickstart.md)
+- [ArgoCD Ingress Configuration](docs/argocd-ingress-configuration.md)
+- [ArgoCD Ingress Quick Start](docs/argocd-ingress-quickstart.md)
+- [Cert-Manager with ACME](docs/cert-manager-gitops-bridge.md)
+- [Cert-Manager Quick Start](docs/cert-manager-quickstart.md)
 
 ## 🤝 Contributing
 

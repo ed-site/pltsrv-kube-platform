@@ -1,0 +1,52 @@
+# Control-plane specific cert-manager configuration
+
+# Controller configuration for control-plane
+controller:
+  # Higher resource allocation for control-plane
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  # Higher replica count for control-plane
+  replicaCount: 2
+  
+  # Pod disruption budget for control-plane
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# Webhook configuration for control-plane
+webhook:
+  # Higher resource allocation for control-plane
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Pod disruption budget for control-plane
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# CA Injector configuration for control-plane
+cainjector:
+  # Higher resource allocation for control-plane
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Pod disruption budget for control-plane
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1 

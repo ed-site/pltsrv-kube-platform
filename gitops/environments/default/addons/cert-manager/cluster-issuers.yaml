@@ -1,0 +1,68 @@
+# ClusterIssuer resources for ACME (Let's Encrypt)
+# These will be applied after cert-manager is installed
+
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  annotations:
+    source: gitops-bridge
+spec:
+  acme:
+    # The ACME server URL
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # Email address used for ACME registration
+    email: admin@mckesson.com
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    # Add a single challenge solver, HTTP01 will be used
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+    # DNS-01 challenge solver (for wildcard certificates)
+    - dns01:
+        # Configure your DNS provider here
+        # Example for Azure DNS:
+        azureDNS:
+          subscriptionID: "your-subscription-id"
+          resourceGroupName: "your-resource-group"
+          hostedZoneName: "westus3.mckesson.com"
+          environment: AzurePublicCloud
+          managedIdentity:
+            clientID: "your-managed-identity-client-id"
+
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+  annotations:
+    source: gitops-bridge
+spec:
+  acme:
+    # The ACME server URL for staging (for testing)
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # Email address used for ACME registration
+    email: admin@mckesson.com
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    # Add a single challenge solver, HTTP01 will be used
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+    # DNS-01 challenge solver (for wildcard certificates)
+    - dns01:
+        # Configure your DNS provider here
+        # Example for Azure DNS:
+        azureDNS:
+          subscriptionID: "your-subscription-id"
+          resourceGroupName: "your-resource-group"
+          hostedZoneName: "westus3.mckesson.com"
+          environment: AzurePublicCloud
+          managedIdentity:
+            clientID: "your-managed-identity-client-id" 

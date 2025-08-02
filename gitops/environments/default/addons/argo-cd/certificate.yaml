@@ -1,0 +1,34 @@
+# Certificate resource for ArgoCD managed by cert-manager
+# This will be applied after cert-manager is installed
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-tls
+  namespace: argocd
+  annotations:
+    source: gitops-bridge
+spec:
+  # Secret name that will be created
+  secretName: argocd-tls
+  # Duration of the certificate
+  duration: 2160h # 90 days
+  # Renew before expiry
+  renewBefore: 360h # 15 days
+  # Common name
+  commonName: argocd.poc.westus3.mckesson.com
+  # DNS names
+  dnsNames:
+    - argocd.poc.westus3.mckesson.com
+    - argocd.poc-dev.westus3.mckesson.com
+    - argocd.poc-prod.westus3.mckesson.com
+  # Issuer reference
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  # Use HTTP-01 challenge
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth 

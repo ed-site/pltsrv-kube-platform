@@ -1,0 +1,76 @@
+# Example cluster-specific nginx ingress configuration
+# This file shows how to customize nginx ingress for a specific workload cluster
+
+controller:
+  # Cluster-specific resource allocation
+  resources:
+    requests:
+      cpu: 150m
+      memory: 192Mi
+    limits:
+      cpu: 300m
+      memory: 384Mi
+  
+  # Cluster-specific replica count
+  replicaCount: 2
+  
+  # Cluster-specific autoscaling
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
+  
+  # Cluster-specific service configuration
+  service:
+    type: LoadBalancer
+    annotations:
+      # Azure Load Balancer annotations for this specific cluster
+      service.beta.kubernetes.io/azure-load-balancer-internal: false
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: ""
+      service.beta.kubernetes.io/azure-load-balancer-sku: "Standard"
+      # Cluster-specific load balancer name
+      service.beta.kubernetes.io/azure-load-balancer-name: "example-workload-cluster-ingress"
+      # Additional annotations specific to this cluster
+      service.beta.kubernetes.io/azure-load-balancer-tags: "cluster=example-workload-cluster,environment=dev"
+  
+  # Cluster-specific pod disruption budget
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+  
+  # Cluster-specific nginx configuration
+  config:
+    # Enable proxy protocol for Azure Load Balancer
+    use-proxy-protocol: "false"
+    # Configure real IP from Azure Load Balancer
+    use-forwarded-headers: "true"
+    # Enable real client IP
+    real-ip-header: "X-Forwarded-For"
+    # Trusted proxies (Azure Load Balancer IPs)
+    proxy-real-ip-cidr: "0.0.0.0/0"
+    # Cluster-specific performance tuning
+    worker-processes: "auto"
+    worker-connections: "1024"
+    keep-alive-requests: "10000"
+    keep-alive: "on"
+    # Buffer sizes optimized for this cluster's traffic patterns
+    proxy-buffer-size: "16k"
+    proxy-buffers-number: "8"
+    proxy-buffering: "on"
+    # Cluster-specific rate limiting
+    rate-limit: "100"
+    rate-limit-window: "1m"
+
+# Default backend configuration for this cluster
+defaultBackend:
+  enabled: true
+  resources:
+    requests:
+      cpu: 75m
+      memory: 96Mi
+    limits:
+      cpu: 150m
+      memory: 192Mi 

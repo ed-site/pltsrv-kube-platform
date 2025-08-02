@@ -1,0 +1,144 @@
+# Default cert-manager configuration with ACME (Let's Encrypt)
+
+# Install CRDs
+installCRDs: true
+
+# Global configuration
+global:
+  leaderElection:
+    namespace: cert-manager
+
+# Controller configuration
+controller:
+  # Enable metrics for monitoring
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: "9402"
+  
+  # Resource limits and requests
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Pod security context
+  podSecurityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+  
+  # Container security context
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+  
+  # Service account configuration
+  serviceAccount:
+    create: true
+    name: "cert-manager"
+    annotations: {}
+
+# Webhook configuration
+webhook:
+  # Enable metrics for monitoring
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: "9402"
+  
+  # Resource limits and requests
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Pod security context
+  podSecurityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+  
+  # Container security context
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+  
+  # Service account configuration
+  serviceAccount:
+    create: true
+    name: "cert-manager-webhook"
+    annotations: {}
+
+# CA Injector configuration
+cainjector:
+  # Enable metrics for monitoring
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: "9402"
+  
+  # Resource limits and requests
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Pod security context
+  podSecurityContext:
+    fsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+  
+  # Container security context
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+  
+  # Service account configuration
+  serviceAccount:
+    create: true
+    name: "cert-manager-cainjector"
+    annotations: {}
+
+# Pod disruption budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Prometheus service monitor
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: true
+    interval: 60s 
