@@ -27,12 +27,12 @@ spec:
         # Configure your DNS provider here
         # Example for Azure DNS:
         azureDNS:
-          subscriptionID: "your-subscription-id"
-          resourceGroupName: "your-resource-group"
+          subscriptionID: "644cf745-2fe7-4214-bf47-1213461ecf85"
+          resourceGroupName: "rg-aks-mgt-poc"
           hostedZoneName: "westus3.mckesson.com"
           environment: AzurePublicCloud
           managedIdentity:
-            clientID: "your-managed-identity-client-id"
+            clientID: "771bf4d7-94d6-436e-9ee6-971f9569c3e1"
 
 ---
 apiVersion: cert-manager.io/v1
@@ -60,9 +60,9 @@ spec:
         # Configure your DNS provider here
         # Example for Azure DNS:
         azureDNS:
-          subscriptionID: "your-subscription-id"
-          resourceGroupName: "your-resource-group"
+          subscriptionID: "644cf745-2fe7-4214-bf47-1213461ecf85"
+          resourceGroupName: "rg-aks-mgt-poc"
           hostedZoneName: "westus3.mckesson.com"
           environment: AzurePublicCloud
           managedIdentity:
-            clientID: "your-managed-identity-client-id" 
+            clientID: "771bf4d7-94d6-436e-9ee6-971f9569c3e1" 

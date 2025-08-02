@@ -60,10 +60,12 @@ locals {
     addons_repo_basepath = local.gitops_addons_basepath
     addons_repo_path     = local.gitops_addons_path
     addons_repo_revision = local.gitops_addons_revision
+    infrastructure_provider = "crossplane"
   }
 
   argocd_apps = {
     addons = file("${path.module}/bootstrap/addons.yaml")
+    clusters = file("${path.module}/bootstrap/clusters.yaml")
   }
 
   tags = {
